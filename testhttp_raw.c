@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include "err.h"
 
-#define BUFF_SIZE 600
+#define BUFF_SIZE 4096 //duze ze wzgledu na cookies
 
 int main(int argc, char *argv[])
 {
@@ -16,6 +16,7 @@ int main(int argc, char *argv[])
   int sock;
   struct addrinfo addr_hints, *addr_result;
   char buff[BUFF_SIZE];
+  unsigned long all = 0;
 
   /* Kontrola dokumentów ... */
   if (argc != 4)
@@ -81,6 +82,7 @@ int main(int argc, char *argv[])
   if (fgets(buff, BUFF_SIZE, fd) == NULL)
     syserr("fgets");
   char *res = buff;
+  all += strlen(res);
 
   if (strstr(res, "200 OK") == NULL)
   {
@@ -89,23 +91,19 @@ int main(int argc, char *argv[])
   }
   else
   {
-    for (;;)
-    {
-      if (fgets(buff, BUFF_SIZE, fd) == NULL)
-        syserr("fgets");
-      if (strlen(buff) == 2)
-        break;
+    while (fgets(buff, BUFF_SIZE, fd) != NULL) {
       res = buff;
+      all += strlen(res);
       if (strstr(res, "Set-Cookie:") != NULL)
       {
         strsep(&res, " ");
-        char *cookie = res;
-        cookie = strsep(&cookie, ";");
-        if (cookie != NULL)
-          printf("%s\n", cookie);
+        char *cookie = strsep(&res, ";");
+        printf("%s\n", cookie);
       }
     }
   }
+
+  printf("Dlugosc zasobu: %lu\n", all);
 
   freeaddrinfo(addr_result);
 

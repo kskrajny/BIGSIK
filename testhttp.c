@@ -1,15 +1,11 @@
-#include <sys/types.h>
-#include <sys/socket.h>
 #include <sys/wait.h>
-#include <netinet/in.h>
-#include <netdb.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include "err.h"
 
-#define BUFFSIZE 256
+#define BUFFSIZE 4096 //duze ze wzgledu na cookies
 
 int main(int argc, char *argv[])
 {
