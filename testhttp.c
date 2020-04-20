@@ -111,10 +111,15 @@ connect = %s:443", cwd, addr) < 0)
     strcpy(buf, argv[2]);
     addr += 7;
     addr = strsep(&addr, "/");
-
-    if (snprintf(buff, BUFFSIZE, "%s:80", addr) < 0)
-      syserr("snprintf");
-  
+    char *help = addr;
+    help = strstr(help, ":");
+    if(help == NULL) { 
+      if (snprintf(buff, BUFFSIZE, "%s:80", addr) < 0)
+        syserr("snprintf");
+    } else {
+      if (snprintf(buff, BUFFSIZE, "%s", addr) < 0)
+        syserr("snprintf");
+    }
     if (execlp(prog, prog, buff, argv[1], buf, NULL) == -1)
       syserr("execlp");
   }

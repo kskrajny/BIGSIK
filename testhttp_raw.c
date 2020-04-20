@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
   struct addrinfo addr_hints, *addr_result;
   char buff[BUFF_SIZE];
   unsigned long all = 0;
-
+  int count = 0;
   /* Kontrola dokumentów ... */
   if (argc != 4)
   {
@@ -82,7 +82,6 @@ int main(int argc, char *argv[])
   if (fgets(buff, BUFF_SIZE, fd) == NULL)
     syserr("fgets");
   char *res = buff;
-  all += strlen(res);
 
   if (strstr(res, "200 OK") == NULL)
   {
@@ -93,13 +92,20 @@ int main(int argc, char *argv[])
   {
     while (fgets(buff, BUFF_SIZE, fd) != NULL) {
       res = buff;
-      all += strlen(res);
+      if (strlen(res) == 0)
+        break;
+      if(strstr(res, "\r\n") == NULL && count == 1) {
+        all += strlen(res);
+      }
+      if (strlen(res) == 2)
+        count = 1;
       if (strstr(res, "Set-Cookie:") != NULL)
       {
         strsep(&res, " ");
         char *cookie = strsep(&res, ";");
         printf("%s\n", cookie);
       }
+      
     }
   }
 
