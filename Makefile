@@ -1,6 +1,7 @@
 CC = gcc
 CFLAGS = -Wall
 TARGETS = testhttp_raw testhttp
+.PHONY : clean
 
 all: $(TARGETS) 
 
