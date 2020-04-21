@@ -105,11 +105,9 @@ int main(int argc, char *argv[])
         char *cookie = strsep(&res, ";");
         printf("%s\n", cookie);
       }
-      
     }
+    printf("Dlugosc zasobu: %lu\n", all);
   }
-
-  printf("Dlugosc zasobu: %lu\n", all);
 
   freeaddrinfo(addr_result);
 
