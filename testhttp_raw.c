@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
   memset(req, 0, sizeof(req));
 
   if (snprintf(req, 256, "GET %s HTTP/1.1\r\nHost: \
-%s\r\nConnection: closed\r\n", argv[3], addr) < 0)
+%s\r\nConnection: close\r\n", argv[3], addr) < 0)
     syserr("snprintf");
 
   FILE *rf;
